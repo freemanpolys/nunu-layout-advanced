@@ -20,11 +20,13 @@ var repositorySet = wire.NewSet(
 	repository.NewRepository,
 	repository.NewTransaction,
 	repository.NewUserRepository,
+	repository.NewTransactionRepository,
 )
 
 var taskSet = wire.NewSet(
 	task.NewTask,
 	task.NewUserTask,
+	task.NewTransactionTask,
 )
 var serverSet = wire.NewSet(
 	server.NewTaskServer,

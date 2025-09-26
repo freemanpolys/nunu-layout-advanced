@@ -48,6 +48,7 @@ func NewHTTPServer(
 
 	v1 := s.Group("/v1")
 	router.InitUserRouter(deps, v1)
+	router.InitTransactionRouter(deps, v1)
 
 	return s
 }

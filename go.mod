@@ -14,6 +14,7 @@ require (
 	github.com/golang-jwt/jwt/v5 v5.2.2
 	github.com/golang/mock v1.6.0
 	github.com/google/wire v0.6.0
+	github.com/morkid/paginate v1.1.10
 	github.com/redis/go-redis/v9 v9.10.0
 	github.com/sony/sonyflake v1.2.1
 	github.com/spf13/viper v1.20.1
@@ -90,7 +91,6 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
 	github.com/morkid/gocache v1.0.0 // indirect
-	github.com/morkid/paginate v1.1.10 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
