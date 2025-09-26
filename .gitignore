@@ -7,3 +7,6 @@ deploy/docker-compose/data
 bin/
 # Added by goreleaser init:
 dist/
+# Test coverage files
+coverage.out
+coverage.html

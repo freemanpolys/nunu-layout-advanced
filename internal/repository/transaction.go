@@ -48,22 +48,11 @@ func (r *transactionRepository) GetByID(ctx context.Context, transactionId strin
 	return &transaction, nil
 }
 
-// GetPaginated retrieves transactions with pagination and filtering
+// GetPaginated retrieves transactions with pagination and filtering using morkid/paginate package only
 func (r *transactionRepository) GetPaginated(ctx context.Context, query *v1.GetTransactionsQuery, pg *paginate.Pagination, request *http.Request) *paginate.Page {
 	db := r.DB(ctx).Model(&model.Transaction{}).Preload("User")
 	
-	// Apply filters
-	if query.Type != "" {
-		db = db.Where("type = ?", query.Type)
-	}
-	if query.Status != "" {
-		db = db.Where("status = ?", query.Status)
-	}
-	if query.Search != "" {
-		db = db.Where("description LIKE ?", "%"+query.Search+"%")
-	}
-	
-	// Use paginate package as shown in example
+	// Use only morkid/paginate package for all filtering, sorting, and pagination
 	page := pg.With(db).Request(request).Response(&[]model.Transaction{})
 	
 	return &page

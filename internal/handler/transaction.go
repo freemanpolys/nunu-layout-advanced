@@ -54,16 +54,14 @@ func (h *TransactionHandler) GetTransaction(ctx *gin.Context) {
 // GetTransactions godoc
 // @Summary 获取交易列表
 // @Schemes
-// @Description 分页获取交易列表，支持筛选和搜索
+// @Description 分页获取交易列表，支持高级筛选和搜索，使用morkid/paginate包的过滤器格式
 // @Tags 交易模块
 // @Accept json
 // @Produce json
 // @Param page query int false "页码" default(1)
 // @Param size query int false "每页数量" default(10)
 // @Param sort query string false "排序字段" default("created_at desc")
-// @Param type query string false "交易类型"
-// @Param status query string false "交易状态"
-// @Param search query string false "搜索关键词"
+// @Param filters query string false "过滤器，JSON格式: [[\"column\",\"operator\",\"value\"]]" example="[[\"type\",\"=\",\"credit\"],[\"or\"],[\"status\",\"like\",\"completed\"]]"
 // @Success 200 {object} map[string]interface{}
 // @Router /transactions [get]
 func (h *TransactionHandler) GetTransactions(ctx *gin.Context) {

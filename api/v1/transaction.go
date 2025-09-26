@@ -19,10 +19,8 @@ type GetTransactionResponseData struct {
 }
 
 type GetTransactionsQuery struct {
-	Page     int    `form:"page,default=1" example:"1"`
-	Size     int    `form:"size,default=10" example:"10"`
-	Sort     string `form:"sort,default=created_at desc" example:"created_at desc"`
-	Type     string `form:"type" example:"credit"`
-	Status   string `form:"status" example:"completed"`
-	Search   string `form:"search" example:"description search"`
+	Page    int    `form:"page,default=1" example:"1"`
+	Size    int    `form:"size,default=10" example:"10"`
+	Sort    string `form:"sort,default=created_at desc" example:"created_at desc"`
+	Filters string `form:"filters" example:"[[\"type\",\"=\",\"credit\"]]"`
 }
