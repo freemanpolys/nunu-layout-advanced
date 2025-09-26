@@ -38,10 +38,40 @@ Tests & Mocks | `test/` + `test/mocks` | Organized by layer; mocks generated via
 2. Repository: Add interface + implementation in `internal/repository/article.go`.
 3. Service: Add `internal/service/article.go` with business logic.
 4. Handler: Add `internal/handler/article.go` (Gin handlers) + request/response DTOs in `api/v1` if externally exposed.
-5. Router: Register routes in `internal/router/article.go` and include from `router.go` init logic.
-6. Wire: Add constructor(s) to `internal/repository` / `internal/service` and include them in the appropriate `wire.go` set (e.g. `cmd/server/wire/wire.go`). Regenerate with `wire` (usually handled externally—avoid running full build; if needed, run `go generate ./...`).
-7. Tests: Add service tests under `test/server/service`, repository tests under `test/server/repository`, and handler tests under `test/server/handler`.
-8. Swagger: Update DTOs in `api/v1` and run `make swag` to regenerate docs.
+5. Pagination: Use morkid/paginate (morkid-paginate.md) for articles endpoints. Stick to morkid/paginate. Do not add custom filter. 
+   Example paging, sorting and filtering with morkid:
+   ```sh
+   http://localhost:3000/?size=10&page=0&sort=-name
+   http://localhost:3000/?size=10&page=1&sort=-name,id
+   http://localhost:3000/?filters=["name","john"]
+   http://localhost:3000/?filters=["name","IS NOT",null]
+   ```
+    Gin Example
+    ```go
+    package main
+
+    import (
+        "github.com/morkid/paginate"
+        ...
+    )
+
+    func main() {
+        // var db *gorm.DB
+        pg := paginate.New()
+        app := gin.Default()
+        app.GET("/", func(c *gin.Context) {
+            stmt := db.Joins("User").Model(&Article{})
+            page := pg.With(stmt).Request(c.Request).Response(&[]Article{})
+            c.JSON(200, page)
+        })
+        app.Run(":3000")
+    }
+    ```
+   
+6. Router: Register routes in `internal/router/article.go` and include from `router.go` init logic.
+7. Wire: Add constructor(s) to `internal/repository` / `internal/service` and include them in the appropriate `wire.go` set (e.g. `cmd/server/wire/wire.go`). Regenerate with `wire` (usually handled externally—avoid running full build; if needed, run `go generate ./...`).
+8. Tests: Add service tests under `test/server/service`, repository tests under `test/server/repository`, and handler tests under `test/server/handler`.
+9.  Swagger: Update DTOs in `api/v1` and run `make swag` to regenerate docs. Swagger text must always be in english.
 
 Keep handlers transport-only; do not embed SQL queries or business logic there. All data access must go through repositories.
 
