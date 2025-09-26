@@ -1,6 +1,8 @@
 module github.com/go-nunu/nunu-layout-advanced
 
-go 1.23
+go 1.23.0
+
+toolchain go1.24.7
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.2
@@ -67,6 +69,7 @@ require (
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hpcloud/tail v1.0.0 // indirect
+	github.com/iancoleman/strcase v0.1.3 // indirect
 	github.com/imkira/go-interpol v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect
@@ -86,6 +89,8 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/montanaflynn/stats v0.7.1 // indirect
+	github.com/morkid/gocache v1.0.0 // indirect
+	github.com/morkid/paginate v1.1.10 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.3 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec // indirect
