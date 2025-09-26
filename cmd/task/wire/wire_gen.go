@@ -35,9 +35,9 @@ func NewWire(viperViper *viper.Viper, logger *log.Logger) (*app.App, func(), err
 
 // wire.go:
 
-var repositorySet = wire.NewSet(repository.NewDB, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository)
+var repositorySet = wire.NewSet(repository.NewDB, repository.NewRepository, repository.NewTransaction, repository.NewUserRepository, repository.NewTransactionRepository)
 
-var taskSet = wire.NewSet(task.NewTask, task.NewUserTask)
+var taskSet = wire.NewSet(task.NewTask, task.NewUserTask, task.NewTransactionTask)
 
 var serverSet = wire.NewSet(server.NewTaskServer)
 
