@@ -11,6 +11,7 @@ func InitTransactionRouter(
 	// Public routes (no authentication required)
 	publicRouter := r.Group("/")
 	{
+		publicRouter.POST("/transaction", deps.TransactionHandler.CreateTransaction)
 		publicRouter.GET("/transaction/:id", deps.TransactionHandler.GetTransaction)
 		publicRouter.GET("/transactions", deps.TransactionHandler.GetTransactions)
 	}

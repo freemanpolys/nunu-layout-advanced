@@ -20,6 +20,33 @@ func NewTransactionHandler(handler *Handler, transactionService service.Transact
 	}
 }
 
+// CreateTransaction godoc
+// @Summary 创建交易
+// @Schemes
+// @Description 创建新的交易记录
+// @Tags 交易模块
+// @Accept json
+// @Produce json
+// @Param request body v1.CreateTransactionRequest true "Transaction creation request"
+// @Success 201 {object} v1.CreateTransactionResponseData
+// @Router /transaction [post]
+func (h *TransactionHandler) CreateTransaction(ctx *gin.Context) {
+	var req v1.CreateTransactionRequest
+	if err := ctx.ShouldBindJSON(&req); err != nil {
+		v1.HandleError(ctx, http.StatusBadRequest, v1.ErrBadRequest, nil)
+		return
+	}
+
+	transaction, err := h.transactionService.CreateTransaction(ctx, &req)
+	if err != nil {
+		h.logger.WithContext(ctx).Error("transactionService.CreateTransaction error", zap.Error(err))
+		v1.HandleError(ctx, http.StatusInternalServerError, v1.ErrInternalServerError, nil)
+		return
+	}
+
+	v1.HandleSuccess(ctx, transaction)
+}
+
 // GetTransaction godoc
 // @Summary 获取单个交易
 // @Schemes

@@ -1,13 +1,73 @@
-# Transaction Endpoint Filtering Guide
+# Transaction API Guide
 
-This document shows how to use the advanced filtering capabilities of the transactions endpoint using the morkid/paginate package.
+This document shows how to use the transaction endpoints, including creating transactions and using the advanced filtering capabilities using the morkid/paginate package.
 
-## Basic Usage
+## Endpoints
 
-The transactions endpoint now uses the `filters` parameter with JSON array format for advanced filtering:
+### 1. Create Transaction
+```
+POST /v1/transaction
+```
+
+Creates a new transaction record.
+
+**Request Body:**
+```json
+{
+  "userId": "user123",
+  "amount": 100.50,
+  "type": "credit",
+  "status": "pending",
+  "description": "Payment for order #123"
+}
+```
+
+**Response:**
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "transactionId": "Tr123xyz",
+    "userId": "user123",
+    "amount": 100.50,
+    "type": "credit",
+    "status": "pending",
+    "description": "Payment for order #123",
+    "createdAt": "2024-01-15T10:30:00Z"
+  }
+}
+```
+
+**Example cURL:**
+```bash
+curl -X POST http://localhost:8000/v1/transaction \
+  -H "Content-Type: application/json" \
+  -d '{
+    "userId": "user123",
+    "amount": 100.50,
+    "type": "credit",
+    "status": "pending",
+    "description": "Payment for order #123"
+  }'
+```
+
+### 2. Get Single Transaction
+```
+GET /v1/transaction/{id}
+```
+
+### 3. Get Transactions List with Filtering
+```
+GET /v1/transactions
+```
+
+## Advanced Filtering Usage
+
+The transactions list endpoint uses the `filters` parameter with JSON array format for advanced filtering:
 
 ```
-GET /transactions?filters=[["column","operator","value"]]
+GET /v1/transactions?filters=[["column","operator","value"]]
 ```
 
 ## Filter Examples
@@ -15,55 +75,55 @@ GET /transactions?filters=[["column","operator","value"]]
 ### 1. Simple Equality Filter
 Filter transactions by type:
 ```
-GET /transactions?filters=[["type","=","credit"]]
+GET /v1/transactions?filters=[["type","=","credit"]]
 ```
 
 ### 2. LIKE Filter for Text Search
 Search in transaction descriptions:
 ```
-GET /transactions?filters=[["description","like","payment"]]
+GET /v1/transactions?filters=[["description","like","payment"]]
 ```
 
 ### 3. Multiple Filters with OR
 Get credit transactions OR completed transactions:
 ```
-GET /transactions?filters=[["type","=","credit"],["or"],["status","=","completed"]]
+GET /v1/transactions?filters=[["type","=","credit"],["or"],["status","=","completed"]]
 ```
 
 ### 4. Multiple Filters with AND
 Get credit transactions that are completed:
 ```
-GET /transactions?filters=[["type","=","credit"],["and"],["status","=","completed"]]
+GET /v1/transactions?filters=[["type","=","credit"],["and"],["status","=","completed"]]
 ```
 
 ### 5. Date Range Filter
 Get transactions from a specific date range:
 ```
-GET /transactions?filters=[["created_at","between",["2024-01-01","2024-12-31"]]]
+GET /v1/transactions?filters=[["created_at","between",["2024-01-01","2024-12-31"]]]
 ```
 
 ### 6. IN Filter
 Get transactions with specific statuses:
 ```
-GET /transactions?filters=[["status","in",["completed","pending","processing"]]]
+GET /v1/transactions?filters=[["status","in",["completed","pending","processing"]]]
 ```
 
 ### 7. NULL Checks
 Get transactions without description:
 ```
-GET /transactions?filters=[["description","is",null]]
+GET /v1/transactions?filters=[["description","is",null]]
 ```
 
 ### 8. Complex Nested Filters
 Complex condition: (type=credit AND status=completed) OR (amount > 100):
 ```
-GET /transactions?filters=[[["type","=","credit"],["and"],["status","=","completed"]],["or"],["amount",">",100]]
+GET /v1/transactions?filters=[[["type","=","credit"],["and"],["status","=","completed"]],["or"],["amount",">",100]]
 ```
 
 ### 9. User Relationship Filtering
 Filter by user name (using JOIN relationship):
 ```
-GET /transactions?filters=[["user.name","like","john"]]
+GET /v1/transactions?filters=[["user.name","like","john"]]
 ```
 
 ## Supported Operators
@@ -91,7 +151,7 @@ GET /transactions?filters=[["user.name","like","john"]]
 
 Combine filters with pagination and sorting:
 ```
-GET /transactions?page=1&size=20&sort=-created_at&filters=[["type","=","credit"]]
+GET /v1/transactions?page=1&size=20&sort=-created_at&filters=[["type","=","credit"]]
 ```
 
 ## URL Encoding
@@ -100,7 +160,7 @@ When using filters in URLs, make sure to properly encode the JSON:
 ```javascript
 const filters = [["type","=","credit"],["or"],["status","=","completed"]];
 const encodedFilters = encodeURIComponent(JSON.stringify(filters));
-const url = `/transactions?filters=${encodedFilters}`;
+const url = `/v1/transactions?filters=${encodedFilters}`;
 ```
 
 ## Migration from Old Parameters
@@ -112,7 +172,7 @@ GET /transactions?type=credit&status=completed&search=payment
 
 ### After (morkid/paginate filters):
 ```
-GET /transactions?filters=[["type","=","credit"],["and"],["status","=","completed"],["and"],["description","like","payment"]]
+GET /v1/transactions?filters=[["type","=","credit"],["and"],["status","=","completed"],["and"],["description","like","payment"]]
 ```
 
 This new approach provides much more flexibility and supports complex filtering scenarios that weren't possible with the old custom parameters.
