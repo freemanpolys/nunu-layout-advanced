@@ -3,5 +3,7 @@ storage/logs
 *.log
 deploy/docker-compose/conf
 deploy/docker-compose/data
+# Build artifacts
+bin/
 # Added by goreleaser init:
 dist/

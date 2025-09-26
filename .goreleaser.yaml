@@ -6,7 +6,7 @@
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 # vim: set ts=2 sw=2 tw=0 fo=cnqoj
 
-version: 2
+version: 1
 
 before:
   hooks:
@@ -16,12 +16,14 @@ before:
     - go generate ./...
 
 builds:
-  - env:
+  - id: server
+    main: ./cmd/server
+    env:
       - CGO_ENABLED=0
     goos:
       - linux
-      - windows
-      - darwin
+    goarch:
+      - amd64
 
 archives:
   - format: tar.gz
@@ -37,6 +39,20 @@ archives:
     format_overrides:
       - goos: windows
         format: zip
+
+dockers:
+  - use: buildx
+    ids:
+      - server
+    goos: linux
+    goarch: amd64
+    dockerfile: deploy/build/Dockerfile
+    image_templates:
+      - "{{.ProjectName}}:{{ .Tag }}-amd64"
+      - "{{.ProjectName}}:latest-amd64"
+    build_flag_templates:
+      - "--platform=linux/amd64"
+      - "--build-arg=APP_RELATIVE_PATH=./cmd/server"
 
 changelog:
   sort: asc
